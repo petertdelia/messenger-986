@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,4 +41,10 @@ const ChatContent = (props) => {
   );
 };
 
-export default ChatContent;
+const mapStateToProps = (state) => {
+  return {
+    conversations: state.conversations
+  };
+};
+
+export default connect(mapStateToProps)(ChatContent);
