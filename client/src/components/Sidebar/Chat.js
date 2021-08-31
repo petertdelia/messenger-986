@@ -4,6 +4,7 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
+import { sendActiveChat } from '../../store/utils/thunkCreators';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,11 +22,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Chat = (props) => {
   const classes = useStyles();
-  const { conversation } = props;
+  const { conversation, user } = props;
   const { otherUser } = conversation;
 
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
+    sendActiveChat({
+      id: user.id,
+      activeChat: conversation.otherUser.username
+    });
   };
 
   return (

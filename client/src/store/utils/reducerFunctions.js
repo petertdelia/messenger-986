@@ -47,6 +47,21 @@ export const removeOfflineUserFromStore = (state, id) => {
   });
 };
 
+export const addOtherUserActiveChatToStore = (state, otherUser) => {
+  return state.map(convo => {
+    console.log(otherUser)
+    if (otherUser.id === convo.otherUser.id) {
+      console.log("HELLOOOOO")
+      const convoCopy = { ...convo };
+      convoCopy.otherUser.activeChat = otherUser.activeChat;
+      return convoCopy;
+    } else {
+      console.log("NNOOO")
+      return convo;
+    }
+  })
+}
+
 export const addSearchedUsersToStore = (state, users) => {
   const currentUsers = {};
 
