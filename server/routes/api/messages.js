@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { Op } = require("sequelize");
 const { Conversation, Message } = require("../../db/models");
 const onlineUsers = require("../../onlineUsers");
 
@@ -43,5 +44,31 @@ router.post("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.put("/:messageId-:convoId-:senderId", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+    const { messageId, convoId, senderId } = req.params;
+    // https://sequelize.org/master/manual/model-querying-basics.html#simple-update-queries
+    const messages = await Message.update({ read: true }, {
+      where: {
+        id: {
+          [Op.gte]: Number(messageId)
+        },
+        conversationId: {
+          [Op.eq]: Number(convoId)
+        },
+        senderId: {
+          [Op.eq]: Number(senderId)
+        }
+      }
+    });
+    res.json(messages)
+  } catch (error) {
+    next(error);
+  }
+})
 
 module.exports = router;

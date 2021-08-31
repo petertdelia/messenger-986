@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  updateConversation,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -90,6 +91,23 @@ const sendMessage = (data, body) => {
     sender: data.sender,
   });
 };
+
+const updateReadMessages = async (messageInfo) => {
+  const { messageId, convoId, senderId } = messageInfo;
+  const { data } = await axios.put(`/api/messages/${messageId}-${convoId}-${senderId}`);
+  return data;
+}
+
+export const markMessagesAsRead = (messageInfo) => async (dispatch) => {
+  try {
+    await updateReadMessages(messageInfo);
+    dispatch(updateConversation(messageInfo));
+    // SPIKE: emit the updated conversation so that the other user gets the update
+  } catch (error) {
+    console.error(error);
+  }
+
+}
 
 export const sendActiveChat = (otherUser) => {
   socket.emit("set-active-chat", otherUser);
