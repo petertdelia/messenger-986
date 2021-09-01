@@ -5,6 +5,7 @@ import {
   removeOfflineUser,
   addOnlineUser,
   setOtherUserActiveChat,
+  updateConversation,
 } from "./store/conversations";
 
 const socket = io(window.location.origin);
@@ -16,9 +17,13 @@ socket.on("connect", () => {
     store.dispatch(addOnlineUser(id));
   });
 
-  socket.on("set-active-chat", (otherUser) => {
+  socket.on("set-other-user-active-chat", (otherUser) => {
     store.dispatch(setOtherUserActiveChat(otherUser))
-  })
+  });
+
+  socket.on("update-read-messages", (messageInfo) => {
+    store.dispatch(updateConversation(messageInfo));
+  });
 
   socket.on("remove-offline-user", (id) => {
     store.dispatch(removeOfflineUser(id));

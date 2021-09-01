@@ -98,8 +98,7 @@ export const updateConversationInStore = (state, messageInfo) => {
     if (convo.id === messageInfo.convoId) {
       const convoCopy = { ...convo };
       convoCopy.messages = convoCopy.messages.map(message => {
-        if (message.id >= messageInfo.messageId &&
-            message.senderId === messageInfo.senderId) {
+        if (messageInfo.messagesToMarkRead.includes(message.id)) {
           message.read = true;
           return message;
         } else {

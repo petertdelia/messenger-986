@@ -27,12 +27,13 @@ const Chat = (props) => {
 
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
-    const firstUnreadMessage = conversation.messages.find(message => !message.read);
-    if (firstUnreadMessage) {
+    const messagesToMarkRead = conversation.messages
+      .filter(message => !message.read && message.senderId === conversation.otherUser.id)
+      .map(message => message.id);
+    if (messagesToMarkRead.length > 0) {
       await markMessagesAsRead({
-        messageId: firstUnreadMessage.id, 
-        convoId: conversation.id,
-        senderId: conversation.otherUser.id,
+        messagesToMarkRead,
+        convoId: conversation.id
       });
     }
     

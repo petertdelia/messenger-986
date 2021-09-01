@@ -92,9 +92,12 @@ const sendMessage = (data, body) => {
   });
 };
 
+const sendReadMessages = (data) => {
+  socket.emit("update-read-messages", data);
+}
+
 const updateReadMessages = async (messageInfo) => {
-  const { messageId, convoId, senderId } = messageInfo;
-  const { data } = await axios.put(`/api/messages/${messageId}-${convoId}-${senderId}`);
+  const { data } = await axios.put("/api/messages/", messageInfo);
   return data;
 }
 
@@ -103,6 +106,7 @@ export const markMessagesAsRead = (messageInfo) => async (dispatch) => {
     await updateReadMessages(messageInfo);
     dispatch(updateConversation(messageInfo));
     // SPIKE: emit the updated conversation so that the other user gets the update
+    sendReadMessages(messageInfo);
   } catch (error) {
     console.error(error);
   }

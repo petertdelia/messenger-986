@@ -45,23 +45,20 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/:messageId-:convoId-:senderId", async (req, res, next) => {
+router.put("/", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
     }
-    const { messageId, convoId, senderId } = req.params;
-    // https://sequelize.org/master/manual/model-querying-basics.html#simple-update-queries
+    const { messagesToMarkRead, convoId } = req.body;
+
     const messages = await Message.update({ read: true }, {
       where: {
         id: {
-          [Op.gte]: Number(messageId)
+          [Op.in]: messagesToMarkRead
         },
         conversationId: {
           [Op.eq]: Number(convoId)
-        },
-        senderId: {
-          [Op.eq]: Number(senderId)
         }
       }
     });
