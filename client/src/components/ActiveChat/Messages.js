@@ -5,6 +5,12 @@ import moment from "moment";
 
 const Messages = (props) => {
   const { messages, otherUser, userId } = props;
+  const allReadMessages = messages.filter(message => message.senderId === userId && message.read);
+  let lastReadId = allReadMessages.length > 0 ? allReadMessages[allReadMessages.length - 1].id : null;
+
+  if (allReadMessages.length > 0) {
+    lastReadId = allReadMessages[allReadMessages.length - 1].id;
+  }
 
   return (
     <Box>
@@ -12,9 +18,9 @@ const Messages = (props) => {
         const time = moment(message.createdAt).format("h:mm");
 
         return message.senderId === userId ? (
-          <SenderBubble key={message.id} text={message.text} time={time} />
+          <SenderBubble key={message.id} messageId={message.id} text={message.text} time={time} lastReadId={lastReadId} otherUser={otherUser}/>
         ) : (
-          <OtherUserBubble key={message.id} text={message.text} time={time} otherUser={otherUser} />
+          <OtherUserBubble key={message.id} text={message.text} time={time} read={message.read} otherUser={otherUser} />
         );
       })}
     </Box>

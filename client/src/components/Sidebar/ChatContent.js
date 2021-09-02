@@ -31,7 +31,7 @@ const ChatContent = (props) => {
 
   const { conversation } = props;
   const { latestMessageText, otherUser, messages } = conversation;
-  const latestMessageRead = messages[messages.length - 1].read;
+  const latestMessageRead = messages[messages.length - 1]?.read;
 
   return (
     <Box className={classes.root}>
