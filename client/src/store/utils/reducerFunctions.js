@@ -1,5 +1,11 @@
+function setLastReadId(messages, userId) {
+  const allReadMessages = messages.filter(message => message.senderId === userId && message.read);
+
+  return allReadMessages.length > 0 ? allReadMessages[allReadMessages.length - 1].id : null;
+}
+
 export const addMessageToStore = (state, payload) => {
-  const { message, sender } = payload;
+  const { message, sender, userId } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
   if (sender !== null) {
     const newConvo = {
@@ -8,6 +14,7 @@ export const addMessageToStore = (state, payload) => {
       messages: [message],
     };
     newConvo.latestMessageText = message.text;
+    newConvo.lastReadId = setLastReadId(newConvo.messages, userId)
     return [newConvo, ...state];
   }
 
@@ -16,6 +23,8 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
+      console.log("USERID", userId )
+      convoCopy.lastReadId = setLastReadId(convoCopy.messages, userId)
       return convoCopy;
     } else {
       return convo;
@@ -106,6 +115,21 @@ export const updateConversationInStore = (state, messageInfo) => {
           return message;
         }
       });
+      convoCopy.lastReadId = setLastReadId(convoCopy.messages, messageInfo.userId)
+      
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+}
+
+export const setLastReadIdInStore = (state, payload) => {
+  return state.map(convo => {
+    if (convo.id === payload.convoId) {
+      const convoCopy = { ...convo };
+
+      convoCopy.lastReadId = setLastReadId(convoCopy.messages, payload.userId);
       return convoCopy;
     } else {
       return convo;

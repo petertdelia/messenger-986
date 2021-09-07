@@ -5,7 +5,8 @@ import {
   removeOfflineUserFromStore,
   addMessageToStore,
   addOtherUserActiveChatToStore,
-  updateConversationInStore
+  updateConversationInStore,
+  setLastReadIdInStore,
 } from "./utils/reducerFunctions";
 
 // ACTIONS
@@ -19,6 +20,7 @@ const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
 const ADD_CONVERSATION = "ADD_CONVERSATION";
 const SET_OTHER_USER_ACTIVE_CHAT = "SET_OTHER_USER_ACTIVE_CHAT";
 const UPDATE_CONVERSATION = "UPDATE_CONVERSATION";
+const SET_LAST_READ_ID = "SET_LAST_READ_ID";
 
 
 // ACTION CREATORS
@@ -30,10 +32,11 @@ export const gotConversations = (conversations) => {
   };
 };
 
-export const setNewMessage = (message, sender) => {
+export const setNewMessage = (params) => {
+  const { message, sender, userId } = params;
   return {
     type: SET_MESSAGE,
-    payload: { message, sender: sender || null },
+    payload: { message, sender: sender || null, userId },
   };
 };
 
@@ -87,6 +90,13 @@ export const updateConversation = (messageInfo) => {
   };
 };
 
+export const setLastReadId = (payload) => {
+  return {
+    type: SET_LAST_READ_ID,
+    payload
+  }
+}
+
 // REDUCER
 
 const reducer = (state = [], action) => {
@@ -118,7 +128,12 @@ const reducer = (state = [], action) => {
         return updateConversationInStore(
           state,
           action.messageInfo,
-        )
+        );
+      case SET_LAST_READ_ID:
+        return setLastReadIdInStore(
+          state,
+          action.payload,
+        );
     default:
       return state;
   }

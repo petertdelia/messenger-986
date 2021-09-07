@@ -22,14 +22,23 @@ socket.on("connect", () => {
   });
 
   socket.on("update-read-messages", (messageInfo) => {
-    store.dispatch(updateConversation(messageInfo));
+    console.log("messageInfo", messageInfo)
+    store.dispatch(updateConversation({
+      convoId: messageInfo.convoId,
+      messagesToMarkRead: messageInfo.messagesToMarkRead,
+      userId: store.getState().user.id,
+    }));
   });
 
   socket.on("remove-offline-user", (id) => {
     store.dispatch(removeOfflineUser(id));
   });
   socket.on("new-message", (data) => {
-    store.dispatch(setNewMessage(data.message, data.sender));
+    store.dispatch(setNewMessage({
+      message: data.message,
+      sender: data.sender, 
+      userId: store.getState().user.id
+    }));
   });
 });
 

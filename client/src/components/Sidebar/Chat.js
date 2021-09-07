@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
 import { sendActiveChat, markMessagesAsRead } from '../../store/utils/thunkCreators';
+import { setLastReadId } from "../../store/conversations";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +44,13 @@ const Chat = (props) => {
     if (messagesToMarkRead.length > 0) {
       await markMessagesAsRead({
         messagesToMarkRead,
-        convoId: conversation.id
+        convoId: conversation.id,
+        userId: user.id,
+      });
+    } else {
+      props.setLastReadId({
+        convoId: conversation.id, 
+        userId: user.id
       });
     }
     
@@ -74,6 +81,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     markMessagesAsRead: (messageInfo) => {
       dispatch(markMessagesAsRead(messageInfo));
+    },
+    setLastReadId: (params) => {
+      dispatch(setLastReadId(params));
     }
   };
 };

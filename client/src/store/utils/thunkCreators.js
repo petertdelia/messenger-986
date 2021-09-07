@@ -1,4 +1,5 @@
 import axios from "axios";
+import store from "..";
 import socket from "../../socket";
 import {
   gotConversations,
@@ -105,7 +106,6 @@ export const markMessagesAsRead = (messageInfo) => async (dispatch) => {
   try {
     await updateReadMessages(messageInfo);
     dispatch(updateConversation(messageInfo));
-    // SPIKE: emit the updated conversation so that the other user gets the update
     sendReadMessages(messageInfo);
   } catch (error) {
     console.error(error);
@@ -126,7 +126,10 @@ export const postMessage = (body) => async (dispatch) => {
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
-      dispatch(setNewMessage(data.message));
+      dispatch(setNewMessage({
+        message: data.message,
+        userId: store.getState().user.id,
+      }));
     }
 
     sendMessage(data, body);
