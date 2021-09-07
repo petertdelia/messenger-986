@@ -98,7 +98,7 @@ const sendReadMessages = (data) => {
 }
 
 const updateReadMessages = async (messageInfo) => {
-  const { data } = await axios.put("/api/messages/", messageInfo);
+  const { data } = await axios.put("/api/messages/read", messageInfo);
   return data;
 }
 

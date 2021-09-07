@@ -4,6 +4,19 @@ function setLastReadId(messages, userId) {
   return allReadMessages.length > 0 ? allReadMessages[allReadMessages.length - 1].id : null;
 }
 
+function setNumberOfUnreadMessages(messages, otherUserId) {
+  return messages.filter(message => !message.read && message.senderId === otherUserId).length;
+}
+
+export const addConversationsToStore = (conversations) => {
+  return conversations.map(convo => {
+    const convoCopy = { ...convo };
+    const { otherUser } = convoCopy;
+    convoCopy.numberOfUnreadMessages = setNumberOfUnreadMessages(convoCopy.messages, otherUser.id)
+    return convoCopy;
+  })
+}
+
 export const addMessageToStore = (state, payload) => {
   const { message, sender, userId } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
@@ -14,6 +27,7 @@ export const addMessageToStore = (state, payload) => {
       messages: [message],
     };
     newConvo.latestMessageText = message.text;
+    newConvo.numberOfUnreadMessages = setNumberOfUnreadMessages(newConvo.messages, newConvo.otherUser.id)
     newConvo.lastReadId = setLastReadId(newConvo.messages, userId)
     return [newConvo, ...state];
   }
@@ -23,7 +37,8 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
-      convoCopy.lastReadId = setLastReadId(convoCopy.messages, userId)
+      convoCopy.numberOfUnreadMessages = setNumberOfUnreadMessages(convoCopy.messages, convoCopy.otherUser.id)
+      convoCopy.lastReadId = setLastReadId(convoCopy.messages, userId);
       return convoCopy;
     } else {
       return convo;
@@ -95,6 +110,8 @@ export const addNewConvoToStore = (state, recipientId, message) => {
       newConvo.id = message.conversationId;
       newConvo.messages.push(message);
       newConvo.latestMessageText = message.text;
+      newConvo.lastReadId = setLastReadId(newConvo.messages, newConvo.otherUser.id);
+      newConvo.numberOfUnreadMessages = setNumberOfUnreadMessages(newConvo.messages, newConvo.otherUser.id)
       return newConvo;
     } else {
       return convo;
@@ -114,7 +131,8 @@ export const updateConversationInStore = (state, messageInfo) => {
           return message;
         }
       });
-      convoCopy.lastReadId = setLastReadId(convoCopy.messages, messageInfo.userId)
+      convoCopy.lastReadId = setLastReadId(convoCopy.messages, messageInfo.userId);
+      convoCopy.numberOfUnreadMessages = setNumberOfUnreadMessages(convoCopy.messages, convoCopy.otherUser.id)
       
       return convoCopy;
     } else {

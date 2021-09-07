@@ -22,7 +22,6 @@ socket.on("connect", () => {
   });
 
   socket.on("update-read-messages", (messageInfo) => {
-    console.log("messageInfo", messageInfo)
     store.dispatch(updateConversation({
       convoId: messageInfo.convoId,
       messagesToMarkRead: messageInfo.messagesToMarkRead,

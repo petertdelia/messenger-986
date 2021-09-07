@@ -31,7 +31,7 @@ const ChatContent = (props) => {
 
   const { conversation } = props;
   const { latestMessageText, otherUser, messages } = conversation;
-  const latestMessageRead = messages[messages.length - 1]?.read;
+  const shouldBoldMessageText = !messages[messages.length - 1]?.read && messages[messages.length - 1]?.senderId === otherUser.id;
 
   return (
     <Box className={classes.root}>
@@ -39,7 +39,7 @@ const ChatContent = (props) => {
         <Typography className={classes.username}>
           {otherUser.username}
         </Typography>
-        <Typography className={latestMessageRead ? classes.previewText : classes.previewTextBold}>
+        <Typography className={shouldBoldMessageText ? classes.previewTextBold : classes.previewText}>
           {latestMessageText}
         </Typography>
       </Box>

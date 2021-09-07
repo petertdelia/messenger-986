@@ -7,6 +7,7 @@ import {
   addOtherUserActiveChatToStore,
   updateConversationInStore,
   setLastReadIdInStore,
+  addConversationsToStore,
 } from "./utils/reducerFunctions";
 
 // ACTIONS
@@ -102,7 +103,7 @@ export const setLastReadId = (payload) => {
 const reducer = (state = [], action) => {
   switch (action.type) {
     case GET_CONVERSATIONS:
-      return action.conversations;
+      return addConversationsToStore(action.conversations);
     case SET_MESSAGE:
       return addMessageToStore(state, action.payload);
     case ADD_ONLINE_USER: {

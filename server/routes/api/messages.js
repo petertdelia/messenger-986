@@ -45,9 +45,9 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/", async (req, res, next) => {
+router.put("/read", async (req, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.user || req.user.dataValues.id !== req.body.userId) {
       return res.sendStatus(401);
     }
     const { messagesToMarkRead, convoId } = req.body;

@@ -1,40 +1,37 @@
 import React from "react";
 import { Box, Chip } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
 import { sendActiveChat, markMessagesAsRead } from '../../store/utils/thunkCreators';
 import { setLastReadId } from "../../store/conversations";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    borderRadius: 8,
-    height: 80,
-    boxShadow: "0 2px 10px 0 rgba(88,133,196,0.05)",
-    marginBottom: 10,
-    display: "flex",
-    alignItems: "center",
-    "&:hover": {
-      cursor: "grab"
+    root: {
+      borderRadius: 8,
+      height: 80,
+      boxShadow: "0 2px 10px 0 rgba(88,133,196,0.05)",
+      marginBottom: 10,
+      display: "flex",
+      alignItems: "center",
+      "&:hover": {
+        cursor: "grab"
+      }
+    },
+    chip: {
+      background: theme.palette.primary.main,
+      color: theme.palette.color,
+      fontSize: theme.typography.fontSize,
+      fontWeight: theme.typography.fontWeight,
+      marginRight: theme.spacing(17)
     }
-  },
-  chip: {
-    background: "#3A8DFF",
-    marginRight: 17,
-    color: "white",
-    fontWeight: "bold", 
-    fontSize: "14"
-  }
-}));
+  }));
 
 const Chat = (props) => {
   const classes = useStyles();
   const { conversation, user, markMessagesAsRead } = props;
-  const { otherUser, messages } = conversation;
-  const numberOfUnreadMessages = messages.filter(message => {
-    return !message.read && message.senderId === otherUser.id;
-  }).length;
+  const { otherUser, numberOfUnreadMessages } = conversation;
 
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
@@ -69,7 +66,7 @@ const Chat = (props) => {
         sidebar={true}
       />
       <ChatContent conversation={conversation} />
-      {numberOfUnreadMessages > 0 && <Chip label={numberOfUnreadMessages} className={classes.chip}/>}
+      {numberOfUnreadMessages > 0 && <Chip size="small" label={numberOfUnreadMessages} className={classes.chip}/>}
     </Box>
   );
 };
