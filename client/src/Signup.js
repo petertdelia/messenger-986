@@ -12,15 +12,20 @@ import {
 import { register } from "./store/utils/thunkCreators";
 import { makeStyles } from "@material-ui/core/styles";
 import ConverseBackground from "./ConverseBackground";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
     boxSizing: "border-box"
   },
+  mobileRoot: {
+    flexDirection: "column",
+    
+  },
   form: {
     flex: 3,
-    flexDirection: "column"
+    flexDirection: "column",
   },
   signupGrid: {
     flexDirection: "column",
@@ -29,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   signupForm: {
     display: "flex", 
     justifyContent: "space-around", 
-    maxHeight: "100%",
+    // maxHeight: "100%",
     width: "100%", 
     flex: 10
   },
@@ -67,6 +72,8 @@ const Signup = (props) => {
   const classes = useStyles();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
+  const isWideScreen = useMediaQuery('(min-width:600px)');
+  console.log("IsWideScreen", isWideScreen)
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -82,7 +89,7 @@ const Signup = (props) => {
   }
 
   return (
-    <Grid container component="main" className={classes.root} justifyContent="center">
+    <Grid container component="main" className={isWideScreen ? classes.root : classes.mobileRoot} justifyContent="center">
       <CssBaseline />
       <ConverseBackground />
       <Grid container item className={classes.form}>

@@ -9,9 +9,6 @@ import bigImage from "./assets/images/bg-img.png";
 import { ReactComponent as BubbleIcon } from "./assets/images/bubble.svg";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100vh",
-  },
   imageBox: {
     flex: 2,
     backgroundImage: `linear-gradient(rgba(58,141,255,.75), #6CC1FF), url(${bigImage}) `,
@@ -31,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   leftTextBottom: {
     color: "white",
     fontSize: 20,
-    marginBottom: "50%"
+    marginBottom: "20vh"
   }
 }));
 

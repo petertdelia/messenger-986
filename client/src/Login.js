@@ -13,10 +13,14 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
 import ConverseBackground from "./ConverseBackground";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
+  },
+  mobile: {
+    flexDirection: "column",
   },
   form: {
     flex: 3,
@@ -65,6 +69,7 @@ const Login = (props) => {
   const history = useHistory();
   const classes = useStyles();
   const { user, login } = props;
+  const isWide = useMediaQuery('(min-width:600px)');
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -79,7 +84,7 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container component="main" className={classes.root} justifyContent="center">
+    <Grid container component="main" className={isWide ? classes.root : classes.mobile} justifyContent="center">
       <CssBaseline />
       <ConverseBackground />
       <Grid container item className={classes.form}>
