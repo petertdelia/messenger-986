@@ -3,8 +3,6 @@ import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
-  Box,
-  SvgIcon,
   Typography,
   Button,
   FormControl,
@@ -14,42 +12,18 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
-import bigImage from "./assets/images/bg-img.png";
-import { ReactComponent as BubbleIcon } from "./assets/images/bubble.svg";
+import ConverseBackground from "./ConverseBackground";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
-    // width: "100vh"
-  },
-  imageBox: {
-    flex: 2,
-    backgroundImage: `linear-gradient(rgba(58,141,255,.75), #6CC1FF), url(${bigImage}) `,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    flexDirection: "column",
-    alignItems: "center",
   },
   form: {
     flex: 3,
     flexDirection: "column"
   },
-  icon: {
-    fontSize: 60,
-    marginBottom: 35
-  },
-  leftText: {
-    color: "white",
-    fontSize: 20,
-  },
-  leftTextBottom: {
-    color: "white",
-    fontSize: 20,
-    marginBottom: "75%"
-  },
   loginGrid: {
     flexDirection: "column",
-    // alignItems: "baseline",
     justifyContent: "space-around"
   },
   loginForm: {
@@ -58,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%", 
     flex: 20
   },
-  accountButton: {
+  signupButton: {
     boxShadow: "1px -1px 13px 3px #C9C9C9",
     margin: "5% 5%",
     width: "30%",
@@ -66,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "5px",
   },
   formSpacing: {
-    margin: "2% 20%",
+    margin: "3vh 10vw",
     fontSize: ".7em"
   },
   welcomeBack: {
@@ -77,16 +51,14 @@ const useStyles = makeStyles((theme) => ({
   },
   loginButtonBox: {
     alignSelf: "center",
-    marginTop: "5%",
-    marginBottom: "25%",
+    marginTop: "3vh",
+    marginBottom: "10vh",
   },
   loginButton: {
     height: "5vw", 
     width: "22vh",
     fontSize: ".9em"
   }
-
-  
 }));
 
 const Login = (props) => {
@@ -107,18 +79,13 @@ const Login = (props) => {
   }
 
   return (
-    
     <Grid container component="main" className={classes.root} justifyContent="center">
       <CssBaseline />
-      <Grid container justifyContent="center" item className={classes.imageBox} >
-        <SvgIcon className={classes.icon} component={BubbleIcon} viewBox="0 0 67 67"></SvgIcon>
-        <Typography className={classes.leftText}>Converse with anyone</Typography> 
-        <Typography className={classes.leftTextBottom}>with any language</Typography>
-      </Grid>
+      <ConverseBackground />
       <Grid container item className={classes.form}>
         <Grid container item style={{justifyContent: "flex-end", alignItems: "center", flex: 1}}>
           <Typography color="secondary" variant="subtitle1">Don't have an account?</Typography>
-          <Button className={classes.accountButton} color="primary" onClick={() => history.push("/register")}>
+          <Button className={classes.signupButton} color="primary" onClick={() => history.push("/register")}>
             <Typography variant="subtitle1">Create account</Typography>
           </Button>
         </Grid>
@@ -126,12 +93,12 @@ const Login = (props) => {
           <Grid container className={classes.loginGrid}>
             <Typography className={`${classes.formSpacing} ${classes.welcomeBack}`} >Welcome back!</Typography>
             <Grid className={classes.formSpacing}>
-              <Typography variant="subtitle1" color="secondary">E-mail address</Typography>
-              <FormControl fullWidth="true" margin="normal" required>
+              <Typography variant="subtitle1" color="secondary">Username</Typography>
+              <FormControl fullWidth="true" required>
                 <TextField
                   aria-label="username"
                   name="username"
-                  type="text"
+                  type="username"
                   InputProps={{
                     style: {fontSize: 14},
                   }}
@@ -140,7 +107,7 @@ const Login = (props) => {
             </Grid>
             <Grid className={classes.formSpacing}>
               <Typography variant="subtitle1" color="secondary">Password</Typography>
-              <FormControl fullWidth="true" margin="normal" required>
+              <FormControl fullWidth="true" required>
                 <TextField
                   aria-label="password"
                   type="password"
@@ -155,7 +122,6 @@ const Login = (props) => {
                     </InputAdornment>
                   }}
                 />
-              
               </FormControl>
             </Grid>
             <Grid className={classes.loginButtonBox}>

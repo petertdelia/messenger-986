@@ -3,17 +3,68 @@ import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
-  Box,
   Typography,
   Button,
   FormControl,
   TextField,
-  FormHelperText,
+  CssBaseline,
 } from "@material-ui/core";
 import { register } from "./store/utils/thunkCreators";
+import { makeStyles } from "@material-ui/core/styles";
+import ConverseBackground from "./ConverseBackground";
 
-const Login = (props) => {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "100vh",
+    boxSizing: "border-box"
+  },
+  form: {
+    flex: 3,
+    flexDirection: "column"
+  },
+  signupGrid: {
+    flexDirection: "column",
+    justifyContent: "space-around"
+  },
+  signupForm: {
+    display: "flex", 
+    justifyContent: "space-around", 
+    maxHeight: "100%",
+    width: "100%", 
+    flex: 10
+  },
+  loginButton: {
+    boxShadow: "1px -1px 13px 3px #C9C9C9",
+    margin: "5% 5%",
+    width: "30%",
+    height: "60%",
+    borderRadius: "5px",
+  },
+  formSpacing: {
+    margin: "3vh 10vw",
+    fontSize: ".7em"
+  },
+  createAccount: {
+    fontSize: "1.75em",
+    fontWeight: "bold",
+    marginTop: "10vh",
+    marginLeft: "10vw"
+  },
+  signupButtonBox: {
+    alignSelf: "center",
+    marginTop: "3vh",
+    marginBottom: "10vh",
+  },
+  signupButton: {
+    height: "5vw", 
+    width: "22vh",
+    fontSize: ".9em",
+  }
+}));
+
+const Signup = (props) => {
   const history = useHistory();
+  const classes = useStyles();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
 
@@ -22,12 +73,6 @@ const Login = (props) => {
     const username = event.target.username.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const confirmPassword = event.target.confirmPassword.value;
-
-    if (password !== confirmPassword) {
-      setFormErrorMessage({ confirmPassword: "Passwords must match" });
-      return;
-    }
 
     await register({ username, email, password });
   };
@@ -37,72 +82,66 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")}>Login</Button>
+    <Grid container component="main" className={classes.root} justifyContent="center">
+      <CssBaseline />
+      <ConverseBackground />
+      <Grid container item className={classes.form}>
+        <Grid container item style={{justifyContent: "flex-end", alignItems: "center", flex: 1}}>
+          <Typography color="secondary" variant="subtitle1">Already have an account?</Typography>
+          <Button className={classes.loginButton} color="primary" onClick={() => history.push("/login")}>
+            <Typography variant="subtitle1">Login</Typography>
+          </Button>
         </Grid>
-        <form onSubmit={handleRegister}>
-          <Grid>
-            <Grid>
-              <FormControl>
+        <form onSubmit={handleRegister} className={classes.signupForm}>
+          <Grid container className={classes.signupGrid}>
+            <Typography className={classes.createAccount} >Create an account.</Typography>
+            <Grid className={classes.formSpacing}>
+              <Typography variant="subtitle1" color="secondary">Username</Typography>
+              <FormControl fullWidth="true" required>
                 <TextField
                   aria-label="username"
-                  label="Username"
                   name="username"
                   type="text"
-                  required
+                  InputProps={{
+                    style: {fontSize: 14},
+                  }}
                 />
               </FormControl>
             </Grid>
-            <Grid>
-              <FormControl>
+            <Grid className={classes.formSpacing}>
+              <Typography variant="subtitle1" color="secondary">E-mail address</Typography>
+              <FormControl fullWidth="true" required>
                 <TextField
-                  label="E-mail address"
-                  aria-label="e-mail address"
-                  type="email"
+                  aria-label="E-mail address"
                   name="email"
-                  required
+                  type="email"
+                  InputProps={{
+                    style: {fontSize: 14},
+                  }}
                 />
               </FormControl>
             </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
+            <Grid className={classes.formSpacing}>
+              <Typography variant="subtitle1" color="secondary">Password</Typography>
+              <FormControl fullWidth="true" required>
                 <TextField
                   aria-label="password"
-                  label="Password"
                   type="password"
-                  inputProps={{ minLength: 6 }}
                   name="password"
-                  required
+                  InputProps={{
+                    style: {fontSize: 20},
+                  }}
                 />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
               </FormControl>
             </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  label="Confirm Password"
-                  aria-label="confirm password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="confirmPassword"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
+            <Grid className={classes.signupButtonBox}>
+              <Button className={classes.signupButton} size="large" type="submit" color="primary" variant="contained">
+                Create
+              </Button>
             </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
           </Grid>
         </form>
-      </Box>
+      </Grid>
     </Grid>
   );
 };
@@ -121,4 +160,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
