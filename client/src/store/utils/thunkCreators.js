@@ -1,10 +1,12 @@
 import axios from "axios";
+import store from "..";
 import socket from "../../socket";
 import {
   gotConversations,
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  updateConversation,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -91,6 +93,30 @@ const sendMessage = (data, body) => {
   });
 };
 
+const sendReadMessages = (data) => {
+  socket.emit("update-read-messages", data);
+}
+
+const updateReadMessages = async (messageInfo) => {
+  const { data } = await axios.put("/api/messages/read", messageInfo);
+  return data;
+}
+
+export const markMessagesAsRead = (messageInfo) => async (dispatch) => {
+  try {
+    await updateReadMessages(messageInfo);
+    dispatch(updateConversation(messageInfo));
+    sendReadMessages(messageInfo);
+  } catch (error) {
+    console.error(error);
+  }
+
+}
+
+export const sendActiveChat = (otherUser) => {
+  socket.emit("set-active-chat", otherUser);
+};
+
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
@@ -100,7 +126,10 @@ export const postMessage = (body) => async (dispatch) => {
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
-      dispatch(setNewMessage(data.message));
+      dispatch(setNewMessage({
+        message: data.message,
+        userId: store.getState().user.id,
+      }));
     }
 
     sendMessage(data, body);

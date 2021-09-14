@@ -4,6 +4,10 @@ import {
   addSearchedUsersToStore,
   removeOfflineUserFromStore,
   addMessageToStore,
+  addOtherUserActiveChatToStore,
+  updateConversationInStore,
+  setLastReadIdInStore,
+  addConversationsToStore,
 } from "./utils/reducerFunctions";
 
 // ACTIONS
@@ -15,6 +19,10 @@ const REMOVE_OFFLINE_USER = "REMOVE_OFFLINE_USER";
 const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
 const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
 const ADD_CONVERSATION = "ADD_CONVERSATION";
+const SET_OTHER_USER_ACTIVE_CHAT = "SET_OTHER_USER_ACTIVE_CHAT";
+const UPDATE_CONVERSATION = "UPDATE_CONVERSATION";
+const SET_LAST_READ_ID = "SET_LAST_READ_ID";
+
 
 // ACTION CREATORS
 
@@ -25,10 +33,11 @@ export const gotConversations = (conversations) => {
   };
 };
 
-export const setNewMessage = (message, sender) => {
+export const setNewMessage = (params) => {
+  const { message, sender, userId } = params;
   return {
     type: SET_MESSAGE,
-    payload: { message, sender: sender || null },
+    payload: { message, sender: sender || null, userId },
   };
 };
 
@@ -67,12 +76,34 @@ export const addConversation = (recipientId, newMessage) => {
   };
 };
 
+// set other user's active chat status
+export const setOtherUserActiveChat = (otherUser) => {
+  return {
+    type: SET_OTHER_USER_ACTIVE_CHAT,
+    otherUser,
+  };
+};
+
+export const updateConversation = (messageInfo) => {
+  return {
+    type: UPDATE_CONVERSATION,
+    messageInfo,
+  };
+};
+
+export const setLastReadId = (payload) => {
+  return {
+    type: SET_LAST_READ_ID,
+    payload
+  }
+}
+
 // REDUCER
 
 const reducer = (state = [], action) => {
   switch (action.type) {
     case GET_CONVERSATIONS:
-      return action.conversations;
+      return addConversationsToStore(action.conversations);
     case SET_MESSAGE:
       return addMessageToStore(state, action.payload);
     case ADD_ONLINE_USER: {
@@ -80,6 +111,9 @@ const reducer = (state = [], action) => {
     }
     case REMOVE_OFFLINE_USER: {
       return removeOfflineUserFromStore(state, action.id);
+    }
+    case SET_OTHER_USER_ACTIVE_CHAT: {
+      return addOtherUserActiveChatToStore(state, action.otherUser);
     }
     case SET_SEARCHED_USERS:
       return addSearchedUsersToStore(state, action.users);
@@ -91,6 +125,16 @@ const reducer = (state = [], action) => {
         action.payload.recipientId,
         action.payload.newMessage
       );
+      case UPDATE_CONVERSATION:
+        return updateConversationInStore(
+          state,
+          action.messageInfo,
+        );
+      case SET_LAST_READ_ID:
+        return setLastReadIdInStore(
+          state,
+          action.payload,
+        );
     default:
       return state;
   }
