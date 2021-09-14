@@ -10,6 +10,7 @@ import {
   FormControl,
   TextField,
   CssBaseline,
+  InputAdornment,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   imageBox: {
     flex: 2,
     backgroundImage: `linear-gradient(rgba(58,141,255,.75), #6CC1FF), url(${bigImage}) `,
-    backgroundSize: "contain",
+    backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     flexDirection: "column",
     alignItems: "center",
@@ -34,24 +35,58 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column"
   },
   icon: {
-    // width: "100%",
     fontSize: 60,
     marginBottom: 35
-    // alignSelf: "center"
-    // height: "50%"
   },
   leftText: {
     color: "white",
-    fontSize: 20
-    // marginBottom: 15
-    // width: "100%",
-    // alignSelf: "center"
+    fontSize: 20,
+  },
+  leftTextBottom: {
+    color: "white",
+    fontSize: 20,
+    marginBottom: "75%"
+  },
+  loginGrid: {
+    flexDirection: "column",
+    // alignItems: "baseline",
+    justifyContent: "space-around"
   },
   loginForm: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center"
+    display: "flex", 
+    justifyContent: "space-around", 
+    width: "100%", 
+    flex: 20
+  },
+  accountButton: {
+    boxShadow: "1px -1px 13px 3px #C9C9C9",
+    margin: "5% 5%",
+    width: "30%",
+    height: "60%",
+    borderRadius: "5px",
+  },
+  formSpacing: {
+    margin: "2% 20%",
+    fontSize: ".7em"
+  },
+  welcomeBack: {
+    fontSize: "1.75em",
+    fontWeight: "bold",
+    marginTop: "10%",
+    marginBottom: "5%"
+  },
+  loginButtonBox: {
+    alignSelf: "center",
+    marginTop: "5%",
+    marginBottom: "25%",
+  },
+  loginButton: {
+    height: "5vw", 
+    width: "22vh",
+    fontSize: ".9em"
   }
+
+  
 }));
 
 const Login = (props) => {
@@ -78,38 +113,53 @@ const Login = (props) => {
       <Grid container justifyContent="center" item className={classes.imageBox} >
         <SvgIcon className={classes.icon} component={BubbleIcon} viewBox="0 0 67 67"></SvgIcon>
         <Typography className={classes.leftText}>Converse with anyone</Typography> 
-        <Typography className={classes.leftText}>with any language</Typography>
-        <p style={{marginBottom: "60%"}}></p>
+        <Typography className={classes.leftTextBottom}>with any language</Typography>
       </Grid>
       <Grid container item className={classes.form}>
         <Grid container item style={{justifyContent: "flex-end", alignItems: "center", flex: 1}}>
-          <Typography>Don't have an account?</Typography>
-          <Button onClick={() => history.push("/register")}>Create account</Button>
+          <Typography color="secondary" variant="subtitle1">Don't have an account?</Typography>
+          <Button className={classes.accountButton} color="primary" onClick={() => history.push("/register")}>
+            <Typography variant="subtitle1">Create account</Typography>
+          </Button>
         </Grid>
-        <form onSubmit={handleLogin} style={{display: "flex", justifyContent: "center", width: "100%", flex: 10}}>
-          <Grid container className={classes.loginForm}>
-            <Grid>
-              <FormControl margin="normal" required>
+        <form onSubmit={handleLogin} className={classes.loginForm}>
+          <Grid container className={classes.loginGrid}>
+            <Typography className={`${classes.formSpacing} ${classes.welcomeBack}`} >Welcome back!</Typography>
+            <Grid className={classes.formSpacing}>
+              <Typography variant="subtitle1" color="secondary">E-mail address</Typography>
+              <FormControl fullWidth="true" margin="normal" required>
                 <TextField
                   aria-label="username"
-                  label="Username"
                   name="username"
                   type="text"
+                  InputProps={{
+                    style: {fontSize: 14},
+                  }}
                 />
               </FormControl>
             </Grid>
-            <Grid>
-              <FormControl margin="normal" required>
+            <Grid className={classes.formSpacing}>
+              <Typography variant="subtitle1" color="secondary">Password</Typography>
+              <FormControl fullWidth="true" margin="normal" required>
                 <TextField
-                  label="password"
                   aria-label="password"
                   type="password"
                   name="password"
+                  InputProps={{
+                    style: {fontSize: 20},
+                    endAdornment: 
+                    <InputAdornment position="end" color="primary">
+                      <Button color="primary" size="small">
+                        <Typography variant="subtitle1">Forgot?</Typography>
+                      </Button>
+                    </InputAdornment>
+                  }}
                 />
+              
               </FormControl>
             </Grid>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
+            <Grid className={classes.loginButtonBox}>
+              <Button className={classes.loginButton} size="large" type="submit" color="primary" variant="contained">
                 Login
               </Button>
             </Grid>
