@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import React from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
@@ -13,6 +13,7 @@ import { register } from "./store/utils/thunkCreators";
 import { makeStyles } from "@material-ui/core/styles";
 import ConverseBackground from "./ConverseBackground";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import LoginSignupButtons from "./LoginSignupButtons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
   signupForm: {
     display: "flex", 
     justifyContent: "space-around", 
-    // maxHeight: "100%",
     width: "100%", 
     flex: 10
   },
@@ -68,10 +68,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Signup = (props) => {
-  const history = useHistory();
   const classes = useStyles();
   const { user, register } = props;
-  const [formErrorMessage, setFormErrorMessage] = useState({});
   const isWideScreen = useMediaQuery('(min-width:600px)');
   console.log("IsWideScreen", isWideScreen)
 
@@ -93,12 +91,7 @@ const Signup = (props) => {
       <CssBaseline />
       <ConverseBackground />
       <Grid container item className={classes.form}>
-        <Grid container item style={{justifyContent: "flex-end", alignItems: "center", flex: 1}}>
-          <Typography color="secondary" variant="subtitle1">Already have an account?</Typography>
-          <Button className={classes.loginButton} color="primary" onClick={() => history.push("/login")}>
-            <Typography variant="subtitle1">Login</Typography>
-          </Button>
-        </Grid>
+      <LoginSignupButtons leftText="Already have an account?" buttonText="Login" type="login" />
         <form onSubmit={handleRegister} className={classes.signupForm}>
           <Grid container className={classes.signupGrid}>
             <Typography className={classes.createAccount} >Create an account.</Typography>

@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
 import ConverseBackground from "./ConverseBackground";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import LoginSignupButtons from "./LoginSignupButtons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,7 +67,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = (props) => {
-  const history = useHistory();
   const classes = useStyles();
   const { user, login } = props;
   const isWide = useMediaQuery('(min-width:600px)');
@@ -88,56 +88,51 @@ const Login = (props) => {
       <CssBaseline />
       <ConverseBackground />
       <Grid container item className={classes.form}>
-        <Grid container item style={{justifyContent: "flex-end", alignItems: "center", flex: 1}}>
-          <Typography color="secondary" variant="subtitle1">Don't have an account?</Typography>
-          <Button className={classes.signupButton} color="primary" onClick={() => history.push("/register")}>
-            <Typography variant="subtitle1">Create account</Typography>
-          </Button>
+        <LoginSignupButtons leftText="Don't have an account?" buttonText="Create account" type="register" />
+          <form onSubmit={handleLogin} className={classes.loginForm}>
+            <Grid container className={classes.loginGrid}>
+              <Typography className={`${classes.formSpacing} ${classes.welcomeBack}`} >Welcome back!</Typography>
+              <Grid className={classes.formSpacing}>
+                <Typography variant="subtitle1" color="secondary">Username</Typography>
+                <FormControl fullWidth="true" required>
+                  <TextField
+                    aria-label="username"
+                    name="username"
+                    type="username"
+                    InputProps={{
+                      style: {fontSize: 14},
+                    }}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid className={classes.formSpacing}>
+                <Typography variant="subtitle1" color="secondary">Password</Typography>
+                <FormControl fullWidth="true" required>
+                  <TextField
+                    aria-label="password"
+                    type="password"
+                    name="password"
+                    InputProps={{
+                      style: {fontSize: 20},
+                      endAdornment: 
+                      <InputAdornment position="end" color="primary">
+                        <Button color="primary" size="small">
+                          <Typography variant="subtitle1">Forgot?</Typography>
+                        </Button>
+                      </InputAdornment>
+                    }}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid className={classes.loginButtonBox}>
+                <Button className={classes.loginButton} size="large" type="submit" color="primary" variant="contained">
+                  Login
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
         </Grid>
-        <form onSubmit={handleLogin} className={classes.loginForm}>
-          <Grid container className={classes.loginGrid}>
-            <Typography className={`${classes.formSpacing} ${classes.welcomeBack}`} >Welcome back!</Typography>
-            <Grid className={classes.formSpacing}>
-              <Typography variant="subtitle1" color="secondary">Username</Typography>
-              <FormControl fullWidth="true" required>
-                <TextField
-                  aria-label="username"
-                  name="username"
-                  type="username"
-                  InputProps={{
-                    style: {fontSize: 14},
-                  }}
-                />
-              </FormControl>
-            </Grid>
-            <Grid className={classes.formSpacing}>
-              <Typography variant="subtitle1" color="secondary">Password</Typography>
-              <FormControl fullWidth="true" required>
-                <TextField
-                  aria-label="password"
-                  type="password"
-                  name="password"
-                  InputProps={{
-                    style: {fontSize: 20},
-                    endAdornment: 
-                    <InputAdornment position="end" color="primary">
-                      <Button color="primary" size="small">
-                        <Typography variant="subtitle1">Forgot?</Typography>
-                      </Button>
-                    </InputAdornment>
-                  }}
-                />
-              </FormControl>
-            </Grid>
-            <Grid className={classes.loginButtonBox}>
-              <Button className={classes.loginButton} size="large" type="submit" color="primary" variant="contained">
-                Login
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
       </Grid>
-    </Grid>
   );
 };
 
