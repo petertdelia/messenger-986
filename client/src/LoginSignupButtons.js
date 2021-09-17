@@ -14,10 +14,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column"
   },
   signupButton: {
-    boxShadow: "1px -1px 13px 3px #C9C9C9",
+    boxShadow: "1px -1px 5px 2px #C9C9C9",
     margin: "5% 5%",
-    width: "30%",
-    height: "60%",
+    width: "13vw",
+    height: "9vh",
     borderRadius: "5px",
   },
 }));

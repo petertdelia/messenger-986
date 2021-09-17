@@ -19,16 +19,16 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     fontSize: 60,
-    marginBottom: 35
+    marginBottom: theme.spacing(35)
   },
   leftText: {
-    color: "white",
-    fontSize: 20,
+    color: theme.palette.color,
+    fontSize: theme.typography.converseBackground,
   },
   leftTextBottom: {
-    color: "white",
-    fontSize: 20,
-    marginBottom: "20vh"
+    color: theme.palette.color,
+    fontSize: theme.typography.converseBackground,
+    marginBottom: theme.spacing("20vh")
   }
 }));
 

@@ -4,16 +4,16 @@ import { connect } from "react-redux";
 import {
   Grid,
   Typography,
-  Button,
   FormControl,
   TextField,
-  CssBaseline,
+  Button
 } from "@material-ui/core";
 import { register } from "./store/utils/thunkCreators";
 import { makeStyles } from "@material-ui/core/styles";
 import ConverseBackground from "./ConverseBackground";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import LoginSignupButtons from "./LoginSignupButtons";
+import InputForm from "./InputForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,9 +61,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "10vh",
   },
   signupButton: {
-    height: "5vw", 
+    height: "4vw", 
     width: "22vh",
     fontSize: ".9em",
+  },
+  mobileButton: {
+    height: "14vw", 
+    width: "22vh",
+    fontSize: ".9em"
   }
 }));
 
@@ -71,7 +76,6 @@ const Signup = (props) => {
   const classes = useStyles();
   const { user, register } = props;
   const isWideScreen = useMediaQuery('(min-width:600px)');
-  console.log("IsWideScreen", isWideScreen)
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -88,54 +92,23 @@ const Signup = (props) => {
 
   return (
     <Grid container component="main" className={isWideScreen ? classes.root : classes.mobileRoot} justifyContent="center">
-      <CssBaseline />
-      <ConverseBackground />
+      {isWideScreen && <ConverseBackground />}
       <Grid container item className={classes.form}>
       <LoginSignupButtons leftText="Already have an account?" buttonText="Login" type="login" />
         <form onSubmit={handleRegister} className={classes.signupForm}>
           <Grid container className={classes.signupGrid}>
             <Typography className={classes.createAccount} >Create an account.</Typography>
             <Grid className={classes.formSpacing}>
-              <Typography variant="subtitle1" color="secondary">Username</Typography>
-              <FormControl fullWidth="true" required>
-                <TextField
-                  aria-label="username"
-                  name="username"
-                  type="text"
-                  InputProps={{
-                    style: {fontSize: 14},
-                  }}
-                />
-              </FormControl>
+              <InputForm type="username" name="Username"/>
             </Grid>
             <Grid className={classes.formSpacing}>
-              <Typography variant="subtitle1" color="secondary">E-mail address</Typography>
-              <FormControl fullWidth="true" required>
-                <TextField
-                  aria-label="E-mail address"
-                  name="email"
-                  type="email"
-                  InputProps={{
-                    style: {fontSize: 14},
-                  }}
-                />
-              </FormControl>
+              <InputForm type="email" name="E-mail address"/>
             </Grid>
             <Grid className={classes.formSpacing}>
-              <Typography variant="subtitle1" color="secondary">Password</Typography>
-              <FormControl fullWidth="true" required>
-                <TextField
-                  aria-label="password"
-                  type="password"
-                  name="password"
-                  InputProps={{
-                    style: {fontSize: 20},
-                  }}
-                />
-              </FormControl>
+              <InputForm type="password" name="Password"/>
             </Grid>
             <Grid className={classes.signupButtonBox}>
-              <Button className={classes.signupButton} size="large" type="submit" color="primary" variant="contained">
+              <Button className={isWideScreen ? classes.signupButton : classes.mobileButton} size="large" type="submit" color="primary" variant="contained">
                 Create
               </Button>
             </Grid>
