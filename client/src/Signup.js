@@ -1,33 +1,87 @@
-import React, { useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import React from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
-  Box,
   Typography,
-  Button,
   FormControl,
   TextField,
-  FormHelperText,
+  Button
 } from "@material-ui/core";
 import { register } from "./store/utils/thunkCreators";
+import { makeStyles } from "@material-ui/core/styles";
+import ConverseBackground from "./ConverseBackground";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import LoginSignupButtons from "./LoginSignupButtons";
+import InputForm from "./InputForm";
 
-const Login = (props) => {
-  const history = useHistory();
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "100vh",
+    boxSizing: "border-box"
+  },
+  mobileRoot: {
+    flexDirection: "column",
+    
+  },
+  form: {
+    flex: 3,
+    flexDirection: "column",
+  },
+  signupGrid: {
+    flexDirection: "column",
+    justifyContent: "space-around"
+  },
+  signupForm: {
+    display: "flex", 
+    justifyContent: "space-around", 
+    width: "100%", 
+    flex: 10
+  },
+  loginButton: {
+    boxShadow: "1px -1px 13px 3px #C9C9C9",
+    margin: "5% 5%",
+    width: "30%",
+    height: "60%",
+    borderRadius: "5px",
+  },
+  formSpacing: {
+    margin: "3vh 10vw",
+    fontSize: ".7em"
+  },
+  createAccount: {
+    fontSize: "1.75em",
+    fontWeight: "bold",
+    marginTop: "10vh",
+    marginLeft: "10vw"
+  },
+  signupButtonBox: {
+    alignSelf: "center",
+    marginTop: "3vh",
+    marginBottom: "10vh",
+  },
+  signupButton: {
+    height: "4vw", 
+    width: "22vh",
+    fontSize: ".9em",
+  },
+  mobileButton: {
+    height: "14vw", 
+    width: "22vh",
+    fontSize: ".9em"
+  }
+}));
+
+const Signup = (props) => {
+  const classes = useStyles();
   const { user, register } = props;
-  const [formErrorMessage, setFormErrorMessage] = useState({});
+  const isWideScreen = useMediaQuery('(min-width:600px)');
 
   const handleRegister = async (event) => {
     event.preventDefault();
     const username = event.target.username.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const confirmPassword = event.target.confirmPassword.value;
-
-    if (password !== confirmPassword) {
-      setFormErrorMessage({ confirmPassword: "Passwords must match" });
-      return;
-    }
 
     await register({ username, email, password });
   };
@@ -37,72 +91,30 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")}>Login</Button>
-        </Grid>
-        <form onSubmit={handleRegister}>
-          <Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                  required
-                />
-              </FormControl>
+    <Grid container component="main" className={isWideScreen ? classes.root : classes.mobileRoot} justifyContent="center">
+      {isWideScreen && <ConverseBackground />}
+      <Grid container item className={classes.form}>
+      <LoginSignupButtons leftText="Already have an account?" buttonText="Login" type="login" />
+        <form onSubmit={handleRegister} className={classes.signupForm}>
+          <Grid container className={classes.signupGrid}>
+            <Typography className={classes.createAccount} >Create an account.</Typography>
+            <Grid className={classes.formSpacing}>
+              <InputForm type="username" name="Username"/>
             </Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  label="E-mail address"
-                  aria-label="e-mail address"
-                  type="email"
-                  name="email"
-                  required
-                />
-              </FormControl>
+            <Grid className={classes.formSpacing}>
+              <InputForm type="email" name="E-mail address"/>
             </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  aria-label="password"
-                  label="Password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="password"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
+            <Grid className={classes.formSpacing}>
+              <InputForm type="password" name="Password"/>
             </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  label="Confirm Password"
-                  aria-label="confirm password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="confirmPassword"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
+            <Grid className={classes.signupButtonBox}>
+              <Button className={isWideScreen ? classes.signupButton : classes.mobileButton} size="large" type="submit" color="primary" variant="contained">
+                Create
+              </Button>
             </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
           </Grid>
         </form>
-      </Box>
+      </Grid>
     </Grid>
   );
 };
@@ -121,4 +133,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

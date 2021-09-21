@@ -2,8 +2,13 @@ import { createMuiTheme } from "@material-ui/core";
 
 export const theme = createMuiTheme({
   typography: {
+    subtitle1: {
+      fontSize: 14
+    },
     fontFamily: "Open Sans, sans-serif",
     fontSize: 14,
+    passwordFontSize: 20,
+    converseBackground: 24,
     button: {
       textTransform: "none",
       letterSpacing: 0,
