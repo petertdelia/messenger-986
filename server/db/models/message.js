@@ -15,6 +15,14 @@ const Message = db.define("message", {
     allowNull: false,
     defaultValue: false,
   }
+  // for the Database Redesign PR: update the read status
+  /*
+  readBy: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: ''
+  }
+  */
 });
 
 module.exports = Message;
